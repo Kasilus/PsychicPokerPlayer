@@ -1,3 +1,6 @@
+import enums.Face;
+import enums.Suit;
+
 /**
  * POJO class for playing card
  */

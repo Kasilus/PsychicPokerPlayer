@@ -1,3 +1,7 @@
+import enums.Combination;
+import enums.Face;
+import enums.Suit;
+
 import java.io.*;
 
 /**
@@ -38,11 +42,11 @@ public class Main {
 
         }
 
-        System.out.println();
-
         long estimatedTime = System.nanoTime() - startTime;
 
-        System.out.println("Time : " + estimatedTime);
+        System.out.println();
+
+        System.out.println("Time : " + estimatedTime + " nanoseconds");
 
     }
 

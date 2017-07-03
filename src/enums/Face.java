@@ -1,3 +1,5 @@
+package enums;
+
 /**
  * Enumeration type for card face
  * Has two parameters : name and value of face.

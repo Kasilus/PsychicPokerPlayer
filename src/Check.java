@@ -1,3 +1,5 @@
+import enums.Combination;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;

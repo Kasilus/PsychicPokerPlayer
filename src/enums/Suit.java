@@ -1,3 +1,5 @@
+package enums;
+
 /**
  * Enumeration type for card suit
  * Has one parameter : name.

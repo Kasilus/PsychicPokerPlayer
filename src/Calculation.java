@@ -1,3 +1,5 @@
+import enums.Combination;
+
 /**
  * Allow user to get the best combination
  * for current user hand and deck's top position.

@@ -1,3 +1,5 @@
+package enums;
+
 /**
  * Enumeration type for poker combination
  * Has two parameters : weight and name of combination.
