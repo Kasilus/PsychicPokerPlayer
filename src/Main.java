@@ -1,9 +1,12 @@
 import java.io.*;
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.CyclicBarrier;
 
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
 
         String input = readFromConsole();
 
@@ -11,33 +14,47 @@ public class Main {
 
         long startTime = System.nanoTime();
 
+        final CountDownLatch latch = new CountDownLatch(lines.length);
+
         for (String line : lines) {
 
-            String[] allCards = line.split(" ");
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
 
-            Card[] userHand = new Card[5];
-            Card[] deckTop = new Card[5];
+                    String[] allCards = line.split(" ");
 
-            try {
-                fillHandAndDeck(userHand, deckTop, allCards);
-            }catch (IndexOutOfBoundsException e){
-                System.out.println("Incorrect input!");
-                return;
-            }
+                    Card[] userHand = new Card[5];
+                    Card[] deckTop = new Card[5];
 
-            Calculation calculation = new Calculation(deckTop);
-            int best = calculation.calculateBest(userHand);
+                    try {
+                        fillHandAndDeck(userHand, deckTop, allCards);
+                    }catch (IndexOutOfBoundsException e){
+                        System.out.println("Incorrect input!");
+                        return;
+                    }
+
+                    Calculation calculation = new Calculation(deckTop);
+                    int best = calculation.calculateBest(userHand);
 
 
-            output(userHand, deckTop, best);
+                    output(userHand, deckTop, best);
+
+                    latch.countDown();
+
+                }
+            }).start();
+
 
         }
 
-        System.out.println();
+        latch.await();
 
         long estimatedTime = System.nanoTime() - startTime;
 
+        System.out.println();
         System.out.println("Time : " + estimatedTime);
+
 
     }
 
