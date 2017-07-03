@@ -5,20 +5,13 @@ public class Main {
 
     public static void main(String[] args) {
 
-        String input = new String();
+        String input = readFromConsole();
 
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
+        String[] lines = input.split("\n");
 
-        while (true) {
+        for (String line : lines) {
 
-            input = br.readLine();
-
-            if (input.equals("")){
-                break;
-            }
-
-
-            String[] allCards = input.split(" ");
+            String[] allCards = line.split(" ");
 
             Card[] userHand = new Card[5];
             Card[] deckTop = new Card[5];
@@ -32,11 +25,36 @@ public class Main {
 
 
             output(userHand, deckTop, best);
+
         }
 
-        } catch (IOException e) {
+
+    }
+
+    private static String readFromConsole() {
+
+        StringBuilder full = new StringBuilder();
+
+        try (InputStreamReader inputStreamReader = new InputStreamReader(System.in);
+             BufferedReader bf = new BufferedReader(inputStreamReader)) {
+
+            full = new StringBuilder();
+            String line;
+
+
+            while ((line = bf.readLine()) != null) {
+                if (line.isEmpty()){
+                    break;
+                }
+                full.append(line).append("\n");
+            }
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
+
+        return full.toString();
+
     }
 
 
@@ -63,17 +81,17 @@ public class Main {
     }
 
 
-    private static void output(Card[] userHand, Card[] deckTop, int best){
+    private static void output(Card[] userHand, Card[] deckTop, int best) {
 
         StringBuffer output = new StringBuffer();
 
         output.append("Hand: ");
-        for (Card card: userHand) {
+        for (Card card : userHand) {
             output.append(card).append(" ");
         }
 
         output.append("Deck: ");
-        for (Card card: deckTop) {
+        for (Card card : deckTop) {
             output.append(card).append(" ");
         }
 
