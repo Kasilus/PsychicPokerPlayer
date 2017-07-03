@@ -1,4 +1,4 @@
-import enums.Combination;
+import enums.PokerCombination;
 
 /**
  * Allow user to get the best combination
@@ -62,7 +62,7 @@ public class Calculation {
      * @param cardsCurrent cards in user hand for current case
      */
     private void checkIfBetterCombination(Card[] cardsCurrent){
-        Combination currentCombination = Check.checkBestCombination(cardsCurrent);
+        PokerCombination currentCombination = Check.checkBestCombination(cardsCurrent);
 
         if (currentCombination.getWeight() > best) {
             best = currentCombination.getWeight();

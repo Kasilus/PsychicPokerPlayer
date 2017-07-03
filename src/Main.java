@@ -1,4 +1,4 @@
-import enums.Combination;
+import enums.PokerCombination;
 import enums.Face;
 import enums.Suit;
 
@@ -134,7 +134,7 @@ public class Main {
         }
 
         output.append("Best hand: ");
-        output.append(Combination.getNameByWeight(best));
+        output.append(PokerCombination.getNameByWeight(best));
 
         System.out.println(output);
     }

@@ -4,7 +4,7 @@ package enums;
  * Enumeration type for poker combination
  * Has two parameters : weight and name of combination.
  */
-public enum Combination {
+public enum PokerCombination {
 
     HighestCard(1,"highest-card"), OnePair(2, "one-pair"), TwoPairs(3,"two-pairs"), ThreeOfAKind(4, "three-of-a-kind"), Straight(5, "straight"),
     Flush(6, "flush"), FullHouse(7, "full-house"), FourOfAKind(8, "four-of-a-kind"), StraightFlush(9,"straight-flush"), RoyalFlush(10,"royal-flush");
@@ -12,7 +12,7 @@ public enum Combination {
     private int weight;
     private String name;
 
-    Combination(int weight, String name) {
+    PokerCombination(int weight, String name) {
         this.weight = weight;
         this.name = name;
     }
@@ -29,7 +29,7 @@ public enum Combination {
      * @return name of combination by it's weight
      */
     public static String getNameByWeight(int weight){
-        for (Combination combination : Combination.values()){
+        for (PokerCombination combination : PokerCombination.values()){
             if (combination.weight == weight){
                 return combination.name;
             }

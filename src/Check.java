@@ -1,4 +1,4 @@
-import enums.Combination;
+import enums.PokerCombination;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -65,7 +65,7 @@ public class Check {
      * @param cards cards in current hand
      * @return the best combination for current hand
      */
-    public static Combination checkBestCombination(Card[] cards) {
+    public static PokerCombination checkBestCombination(Card[] cards) {
 
         boolean isFlush = false, isStraight = false, hasSet = false, hasPair = false;
 
@@ -75,9 +75,11 @@ public class Check {
         isStraight = checkStraight(cards);
 
         if (isFlush && isStraight) {
-
-                return Combination.StraightFlush;
-
+            if (cards[0].getFace().getValue() != 10) {
+                return PokerCombination.StraightFlush;
+            } else {
+                return PokerCombination.RoyalFlush;
+            }
         }
 
 
@@ -86,10 +88,10 @@ public class Check {
         for (Map.Entry<Integer, Integer> entry : repeats) {
             switch (entry.getValue()){
                 case 4 :
-                    return Combination.FourOfAKind;
+                    return PokerCombination.FourOfAKind;
                 case 3 :
                     if (checkFullHouse(repeats)){
-                        return Combination.FullHouse;
+                        return PokerCombination.FullHouse;
                     }
                     hasSet = true;
                     break;
@@ -101,23 +103,23 @@ public class Check {
         }
 
         if (isFlush){
-            return Combination.Flush;
+            return PokerCombination.Flush;
         } else if (isStraight){
-            return Combination.Straight;
+            return PokerCombination.Straight;
         } else if (hasSet){
-            return Combination.ThreeOfAKind;
+            return PokerCombination.ThreeOfAKind;
         }
 
         if (hasPair){
             if (repeats.size() == 3 ){
-                return Combination.TwoPairs;
+                return PokerCombination.TwoPairs;
             } else {
-                return Combination.OnePair;
+                return PokerCombination.OnePair;
             }
         }
 
 
-        return Combination.HighestCard;
+        return PokerCombination.HighestCard;
 
     }
 
