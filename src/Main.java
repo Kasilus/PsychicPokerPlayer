@@ -9,6 +9,8 @@ public class Main {
 
         String[] lines = input.split("\n");
 
+        long startTime = System.nanoTime();
+
         for (String line : lines) {
 
             String[] allCards = line.split(" ");
@@ -16,9 +18,12 @@ public class Main {
             Card[] userHand = new Card[5];
             Card[] deckTop = new Card[5];
 
-
-            fillHandAndDeck(userHand, deckTop, allCards);
-
+            try {
+                fillHandAndDeck(userHand, deckTop, allCards);
+            }catch (IndexOutOfBoundsException e){
+                System.out.println("Incorrect input!");
+                return;
+            }
 
             Calculation calculation = new Calculation(deckTop);
             int best = calculation.calculateBest(userHand);
@@ -28,6 +33,11 @@ public class Main {
 
         }
 
+        System.out.println();
+
+        long estimatedTime = System.nanoTime() - startTime;
+
+        System.out.println("Time : " + estimatedTime);
 
     }
 
@@ -58,7 +68,7 @@ public class Main {
     }
 
 
-    private static void fillHandAndDeck(Card[] userHand, Card[] deckTop, String[] allCards) {
+    private static void fillHandAndDeck (Card[] userHand, Card[] deckTop, String[] allCards) throws IndexOutOfBoundsException {
 
         int counter = 0;
 
