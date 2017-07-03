@@ -3,8 +3,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Check the best combination for current hand.
+ */
 public class Check {
 
+    /**
+     * Sort cards in hand in ascending order by faces.
+     * Uses for further simple check of the best combination
+     * @param cards cards in current hand
+     * @return sorted cards in current hand
+     */
     private static Card[] sort(Card[] cards) {
 
         Arrays.sort(
@@ -15,6 +24,14 @@ public class Check {
         return cards;
     }
 
+    /**
+     * Count repeats of card faces in hand for further
+     * simple check of the best combination. Made, because
+     * many poker combinations are based on faces' repeats
+     * @param cards cards in current hand
+     * @return set of map entries for
+     * further simple check of the best combination
+     */
     private static Set<Map.Entry<Integer, Integer>> countRepeats(Card[] cards) {
 
         Map<Integer, Integer> repeats = new HashMap<>();
@@ -34,6 +51,18 @@ public class Check {
         return repeats.entrySet();
     }
 
+    /**
+     * Public method, which allows checking of the best
+     * combination. Algorithm was made for the fastest
+     * search of the best combination.
+     * For example, when we check royal and straight flush,
+     * we check straight and flush combination too. But these
+     * combos are smaller, than four-of-a-kind and full-house.
+     * So as not do same things some times, we remember info
+     * in boolean and check them, when time comes.
+     * @param cards cards in current hand
+     * @return the best combination for current hand
+     */
     public static Combination checkBestCombination(Card[] cards) {
 
         boolean isFlush = false, isStraight = false, hasSet = false, hasPair = false;
@@ -92,6 +121,11 @@ public class Check {
 
     }
 
+    /**
+     * Check flush combination
+     * @param cards cards in current hand
+     * @return true, if there is a flush
+     */
     private static boolean checkFlush(Card[] cards) {
 
         char suit = cards[0].getSuit().getName();
@@ -109,6 +143,15 @@ public class Check {
 
     }
 
+    /**
+     * Check straight combination
+     * Ace can be in this combination either
+     * the highest card (Ace = 14, Ace > King)
+     * or the lowest (Ace = 1, Ace < 2), so
+     * there is second check for this situation
+     * @param cards cards in current hand
+     * @return true, if there is a straight
+     */
     private static boolean checkStraight(Card[] cards) {
 
         int min = cards[0].getFace().getValue();
@@ -124,7 +167,7 @@ public class Check {
             return true;
         }
 
-        // check if ace is first in combination
+        // check if ace is the lowest in combination
         if (cards[4].getFace().getValue() == 14){
             min = 1;
             min++;
@@ -144,6 +187,13 @@ public class Check {
 
     }
 
+    /**
+     * Check full house combination
+     * This is not full check, but
+     * enough for this decision
+     * @param repeats count of card faces' repeats
+     * @return true, if there is a full house
+     */
     private static boolean checkFullHouse(Set<Map.Entry<Integer, Integer>> repeats) {
 
         if (repeats.size() == 2){

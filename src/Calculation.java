@@ -1,12 +1,31 @@
+/**
+ * Allow user to get the best combination
+ * for current user hand and deck's top position.
+ */
 public class Calculation {
 
     final private Card[] deckTop;
     private int best;
 
+    /**
+     * Constructor for specifying deck's top.
+     * With this, you can get the best combination of
+     * every user hand and this deck'top.
+     * @param deckTop 5 top cards of deck
+     */
     public Calculation(Card[] deckTop) {
         this.deckTop = deckTop;
     }
 
+    /**
+     * Recursive method to get and check all
+     * possible combinations, which can be in
+     * user hand (total 32)
+     * @param userHand cards in the user hand (always same)
+     * @param cardsFromHand total of cards from the first user hand in current case
+     * @param startPosition start position for selection of cards
+     * @param result cards in the user hand for current case (different sizes for each situation)
+     */
     private void getAllCombinations(Card[] userHand, int cardsFromHand, int startPosition, Card[] result) {
 
         if (cardsFromHand == 0) {
@@ -35,14 +54,25 @@ public class Calculation {
         }
     }
 
-    private void checkIfBetterCombination(Card[] array){
-        Combination currentCombination = Check.checkBestCombination(array);
+    /**
+     * Check best combination for current case. If it is,
+     * assign new value for variable 'best'.
+     * @param cardsCurrent cards in user hand for current case
+     */
+    private void checkIfBetterCombination(Card[] cardsCurrent){
+        Combination currentCombination = Check.checkBestCombination(cardsCurrent);
 
         if (currentCombination.getWeight() > best) {
             best = currentCombination.getWeight();
         }
     }
 
+    /**
+     * Public method, which allows user calculate best combination
+     * by his hand
+     * @param userHand cards in user hand
+     * @return weight of the best combination
+     */
     public int calculateBest(Card[] userHand) {
 
         best = 1;

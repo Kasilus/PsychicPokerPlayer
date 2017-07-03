@@ -1,6 +1,11 @@
 import java.io.*;
 
-
+/**
+ * Main class with executable method main().
+ * Read cards input from console, check all
+ * possible combinations, choose best and
+ * output it.
+ */
 public class Main {
 
     public static void main(String[] args) {
@@ -41,6 +46,10 @@ public class Main {
 
     }
 
+    /**
+     * Read lines from console input until empty line
+     * @return input from console in the same form
+     */
     private static String readFromConsole() {
 
         StringBuilder full = new StringBuilder();
@@ -68,11 +77,21 @@ public class Main {
     }
 
 
+    /**
+     * Fill user hand and deck's top by cards from all cards,
+     * which we have taken from input
+     * @param userHand array of cards in user hand
+     * @param deckTop  array of cards on the deck top
+     * @param allCards array of cards from line ( user hand + deck's top)
+     * @throws IndexOutOfBoundsException Common for ArrayIndexOutOfBoundsException
+     * and StringIndexOutOfBoundsException, which can be caught. In either case it
+     * means user input exception
+     */
     private static void fillHandAndDeck (Card[] userHand, Card[] deckTop, String[] allCards) throws IndexOutOfBoundsException {
 
         int counter = 0;
 
-        // User's hand
+        // User hand
         for (; counter < 5; counter++) {
             userHand[counter] = new Card(
                     Face.getFaceByName(allCards[counter].charAt(0)),
@@ -80,7 +99,7 @@ public class Main {
             );
         }
 
-        // Top of the card deck
+        // Deck's top
         for (; counter < 10; counter++) {
             deckTop[counter - 5] = new Card(
                     Face.getFaceByName(allCards[counter].charAt(0)),
@@ -90,7 +109,12 @@ public class Main {
 
     }
 
-
+    /**
+     * Print in the console cards in user hand, on the deck's top and best combination
+     * @param userHand cards in user hand
+     * @param deckTop cards on the deck's top
+     * @param best weight of best combination for these cards
+     */
     private static void output(Card[] userHand, Card[] deckTop, int best) {
 
         StringBuffer output = new StringBuffer();

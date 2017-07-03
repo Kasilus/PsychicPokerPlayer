@@ -1,4 +1,7 @@
-
+/**
+ * Enumeration type for card suit
+ * Has one parameter : name.
+ */
 public enum Suit {
 
     Clubs('C'), Diamonds('D'), Hearts('H'), Spades('S');
@@ -13,6 +16,11 @@ public enum Suit {
         return name;
     }
 
+    /**
+     * Allow get card suit by name.
+     * @param name name of suit
+     * @return card suit if it exists
+     */
     public static Suit getSuitByName(char name){
         for (Suit suit : Suit.values()){
             if (suit.name == name){

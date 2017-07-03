@@ -1,3 +1,7 @@
+/**
+ * Enumeration type for poker combination
+ * Has two parameters : weight and name of combination.
+ */
 public enum Combination {
 
     HighestCard(1,"highest-card"), OnePair(2, "one-pair"), TwoPairs(3,"two-pairs"), ThreeOfAKind(4, "three-of-a-kind"), Straight(5, "straight"),
@@ -15,6 +19,13 @@ public enum Combination {
         return weight;
     }
 
+    /**
+     * Allows user get the name of combination by it's weight
+     * It is important, because calculation methods work with and return
+     * just card weight
+     * @param weight weight of card
+     * @return name of combination by it's weight
+     */
     public static String getNameByWeight(int weight){
         for (Combination combination : Combination.values()){
             if (combination.weight == weight){
