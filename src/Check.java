@@ -75,11 +75,9 @@ public class Check {
         isStraight = checkStraight(cards);
 
         if (isFlush && isStraight) {
-            if (cards[0].getFace().getValue() != 10) {
+
                 return Combination.StraightFlush;
-            } else {
-                return Combination.RoyalFlush;
-            }
+
         }
 
 
