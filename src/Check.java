@@ -90,7 +90,7 @@ public class Check {
                 case 4 :
                     return PokerCombination.FourOfAKind;
                 case 3 :
-                    if (checkFullHouse(repeats)){
+                    if (repeats.size() == 2){
                         return PokerCombination.FullHouse;
                     }
                     hasSet = true;
@@ -189,20 +189,7 @@ public class Check {
 
     }
 
-    /**
-     * Check full house combination
-     * This is not full check, but
-     * enough for this decision
-     * @param repeats count of card faces' repeats
-     * @return true, if there is a full house
-     */
-    private static boolean checkFullHouse(Set<Map.Entry<Integer, Integer>> repeats) {
 
-        if (repeats.size() == 2){
-            return true;
-        }
-        return false;
-    }
 
 
 }

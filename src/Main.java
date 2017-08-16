@@ -15,10 +15,11 @@ public class Main {
     public static void main(String[] args) {
 
         String input = readFromConsole();
-
         String[] lines = input.split("\n");
 
+
         long startTime = System.nanoTime();
+
 
         for (String line : lines) {
 
@@ -28,11 +29,16 @@ public class Main {
             Card[] deckTop = new Card[5];
 
             try {
+
                 fillHandAndDeck(userHand, deckTop, allCards);
-            }catch (IndexOutOfBoundsException e){
+
+            } catch (IndexOutOfBoundsException e){
+
                 System.out.println("Incorrect input!");
                 return;
+
             }
+
 
             Calculation calculation = new Calculation(deckTop);
             int best = calculation.calculateBest(userHand);
@@ -44,11 +50,10 @@ public class Main {
 
         long estimatedTime = System.nanoTime() - startTime;
 
-        System.out.println();
-
-        System.out.println("Time : " + estimatedTime + " nanoseconds");
+        System.out.println("\nTime : " + estimatedTime + " nanoseconds");
 
     }
+
 
     /**
      * Read lines from console input until empty line
@@ -112,6 +117,7 @@ public class Main {
         }
 
     }
+
 
     /**
      * Print in the console cards in user hand, on the deck's top and best combination
