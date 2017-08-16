@@ -10,6 +10,53 @@ import java.util.Set;
  */
 public class Check {
 
+
+    interface CheckCombination{
+       PokerCombination check();
+    }
+
+
+    /**
+     * Public method, which allows checking of the best
+     * combination. Algorithm was made for the fastest
+     * search of the best combination.
+     * For example, when we check royal and straight flush,
+     * we check straight and flush combination too. But these
+     * combos are smaller, than four-of-a-kind and full-house.
+     * So as not do same things some times, we remember info
+     * in boolean and check them, when time comes.
+     * @param cards cards in current hand
+     * @return the best combination for current hand
+     */
+    public static PokerCombination checkBestCombination(Card[] cards) {
+
+
+        sort(cards);
+        Set<Map.Entry<Integer, Integer>> repeats = countRepeats(cards);
+
+        CheckCombination[] checks = new CheckCombination[]{
+                new CheckCombination() { public PokerCombination check() { return checkRoyalFlush(cards); } },
+                new CheckCombination() { public PokerCombination check() { return checkStraightFlush(cards); } },
+                new CheckCombination() { public PokerCombination check() { return checkFourOfAKind(cards, repeats); } },
+                new CheckCombination() { public PokerCombination check() { return checkFullHouse(cards, repeats); } },
+                new CheckCombination() { public PokerCombination check() { return checkFlush(cards); } },
+                new CheckCombination() { public PokerCombination check() { return checkStraight(cards); } },
+                new CheckCombination() { public PokerCombination check() { return checkThreeOfAKind(cards, repeats); } },
+                new CheckCombination() { public PokerCombination check() { return checkTwoPairs(cards, repeats); } },
+                new CheckCombination() { public PokerCombination check() { return checkOnePair(cards, repeats); } },
+
+        };
+
+        for (CheckCombination checkCombination : checks){
+           if (checkCombination.check() != null){
+               return checkCombination.check();
+           }
+        }
+
+        return PokerCombination.HighestCard;
+
+    }
+
     /**
      * Sort cards in hand in ascending order by faces.
      * Uses for further simple check of the best combination
@@ -53,82 +100,51 @@ public class Check {
         return repeats.entrySet();
     }
 
-    /**
-     * Public method, which allows checking of the best
-     * combination. Algorithm was made for the fastest
-     * search of the best combination.
-     * For example, when we check royal and straight flush,
-     * we check straight and flush combination too. But these
-     * combos are smaller, than four-of-a-kind and full-house.
-     * So as not do same things some times, we remember info
-     * in boolean and check them, when time comes.
-     * @param cards cards in current hand
-     * @return the best combination for current hand
-     */
-    public static PokerCombination checkBestCombination(Card[] cards) {
+    private static PokerCombination checkRoyalFlush(Card[] cards){
 
-        boolean isFlush = false, isStraight = false, hasSet = false, hasPair = false;
-
-        isFlush = checkFlush(cards);
-
-        sort(cards);
-        isStraight = checkStraight(cards);
-
-        if (isFlush && isStraight) {
-            if (cards[0].getFace().getValue() != 10) {
-                return PokerCombination.StraightFlush;
-            } else {
-                return PokerCombination.RoyalFlush;
-            }
+        if ((checkStraightFlush(cards) != null) && cards[0].getFace().getValue() == 10){
+            return PokerCombination.RoyalFlush;
         }
 
-
-        Set<Map.Entry<Integer, Integer>> repeats = countRepeats(cards);
-
-        for (Map.Entry<Integer, Integer> entry : repeats) {
-            switch (entry.getValue()){
-                case 4 :
-                    return PokerCombination.FourOfAKind;
-                case 3 :
-                    if (repeats.size() == 2){
-                        return PokerCombination.FullHouse;
-                    }
-                    hasSet = true;
-                    break;
-                case 2 :
-                    hasPair = true;
-                    break;
-            }
-
-        }
-
-        if (isFlush){
-            return PokerCombination.Flush;
-        } else if (isStraight){
-            return PokerCombination.Straight;
-        } else if (hasSet){
-            return PokerCombination.ThreeOfAKind;
-        }
-
-        if (hasPair){
-            if (repeats.size() == 3 ){
-                return PokerCombination.TwoPairs;
-            } else {
-                return PokerCombination.OnePair;
-            }
-        }
-
-
-        return PokerCombination.HighestCard;
+        return null;
 
     }
 
-    /**
-     * Check flush combination
-     * @param cards cards in current hand
-     * @return true, if there is a flush
-     */
-    private static boolean checkFlush(Card[] cards) {
+    private static PokerCombination checkStraightFlush(Card[] cards){
+
+        if ((checkFlush(cards) != null) && (checkStraight(cards) != null)){
+            return PokerCombination.StraightFlush;
+        }
+
+        return null;
+
+    }
+
+    private static PokerCombination checkFourOfAKind(Card[] cards, Set<Map.Entry<Integer, Integer>> repeats) {
+
+        for (Map.Entry<Integer, Integer> entry : repeats){
+            if (entry.getValue() == 4){
+                return PokerCombination.FourOfAKind;
+            }
+
+        }
+
+        return null;
+    }
+
+    private static PokerCombination checkFullHouse(Card[] cards, Set<Map.Entry<Integer, Integer>> repeats) {
+
+        for (Map.Entry<Integer, Integer> entry : repeats) {
+            if (entry.getValue() == 3 && repeats.size() == 2) {
+                return PokerCombination.FullHouse;
+            }
+
+        }
+
+        return null;
+    }
+
+    private static PokerCombination checkFlush(Card[] cards) {
 
         char suit = cards[0].getSuit().getName();
         int i = 1;
@@ -138,23 +154,14 @@ public class Check {
         }
 
         if (i == 5) {
-            return true;
+            return PokerCombination.Flush;
         }
 
-        return false;
+        return null;
 
     }
 
-    /**
-     * Check straight combination
-     * Ace can be in this combination either
-     * the highest card (Ace = 14, Ace > King)
-     * or the lowest (Ace = 1, Ace < 2), so
-     * there is second check for this situation
-     * @param cards cards in current hand
-     * @return true, if there is a straight
-     */
-    private static boolean checkStraight(Card[] cards) {
+    private static PokerCombination checkStraight(Card[] cards) {
 
         int min = cards[0].getFace().getValue();
         min++;
@@ -166,7 +173,7 @@ public class Check {
         }
 
         if (i == 5) {
-            return true;
+            return PokerCombination.Straight;
         }
 
         // check if ace is the lowest in combination
@@ -182,14 +189,50 @@ public class Check {
         }
 
         if (i == 4){
-            return true;
+            return PokerCombination.Straight;
         }
 
-        return false;
+        return null;
 
     }
 
+    private static PokerCombination checkThreeOfAKind(Card[] cards, Set<Map.Entry<Integer, Integer>> repeats) {
 
+        for (Map.Entry<Integer, Integer> entry : repeats) {
+            if (entry.getValue() == 3 && repeats.size() == 3) {
+                return PokerCombination.ThreeOfAKind;
+            }
+
+        }
+
+        return null;
+    }
+
+    private static PokerCombination checkTwoPairs(Card[] cards, Set<Map.Entry<Integer, Integer>> repeats) {
+
+        for (Map.Entry<Integer, Integer> entry : repeats) {
+            if (entry.getValue() == 2 && repeats.size() == 3) {
+                return PokerCombination.TwoPairs;
+            }
+
+        }
+
+        return null;
+
+    }
+
+    private static PokerCombination checkOnePair(Card[] cards, Set<Map.Entry<Integer, Integer>> repeats) {
+
+        for (Map.Entry<Integer, Integer> entry : repeats) {
+            if (entry.getValue() == 2 && repeats.size() == 4) {
+                return PokerCombination.OnePair;
+            }
+
+        }
+
+        return null;
+
+    }
 
 
 }

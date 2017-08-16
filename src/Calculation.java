@@ -63,6 +63,7 @@ public class Calculation {
      */
     private void checkIfBetterCombination(Card[] cardsCurrent){
 
+
         PokerCombination currentCombination = Check.checkBestCombination(cardsCurrent);
 
         if (currentCombination.getWeight() > best) {
